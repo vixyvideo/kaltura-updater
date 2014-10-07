@@ -1,11 +1,16 @@
-### Prerequisites
+#Prerequisites
 
-#Debian
+###Debian
 apt-get install subversion sshpass
 
-#Centos 
+###Centos 
 yum install svn sshpass 
 
-
-Connect once to the svn host to save the remote host
+###Connect once to the svn host to save the remote host
 svn export svn+ssh://svnread@kelev.kaltura.com/usr/local/kalsource/backend/server/tags/falcon_2012_08_20 
+
+###Implement config.sample.sh as config.sh
+Select your required releases. NOTE: the release order should be in chronological order. 
+
+#Execute
+Execute bin/update.sh

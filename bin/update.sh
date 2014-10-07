@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+echo "-- Starting udpate process"
+echo "-- Parse & prompt update"
+. bin/setup.sh
+
+echo "-- Checkout all releases to exports"
+. bin/export.sh
