@@ -1,7 +1,7 @@
 ### Prerequisites
 
-Debian
+#Debian
 apt-get install subversion sshpass
 
-Centos 
+#Centos 
 yum install subverion sshpass 
