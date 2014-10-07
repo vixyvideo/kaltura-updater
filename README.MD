@@ -1,3 +1,5 @@
+#DO NOT USE THIS ON A PRODUCTION SERVER! NO WARRANTY
+
 #Prerequisites
 
 ###Debian
