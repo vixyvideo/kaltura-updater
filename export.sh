@@ -17,14 +17,20 @@ TAGS="$TAGS gemini_2013_07_16"
 TAGS="$TAGS gemini_2013_07_16_1"
 TAGS="$TAGS falcon_2012_08_20"
 
+#init exports caching folder, if missing
+if [ ! -d "exports"];
+then
+	mkdir exports
+fi
+
 echo "Exporting tags"
 for TAG in $TAGS
 do
 	echo "Checking export/$TAG"
-	if [ ! -d "export/$TAG" ]; 
+	if [ ! -d "exports/$TAG" ]; 
 	then
 		echo "No local cache for $TAG found. Starting export"
-	    $(SSHPASS=onlyread SVN_SSH='/usr/bin/sshpass -e ssh' /usr/bin/svn export  --username 'svnread' --password 'onlyread' --non-interactive svn+ssh://svnread@kelev.kaltura.com/usr/local/kalsource/backend/server/tags/$TAG "export/$TAG")
+	    $(SSHPASS=onlyread SVN_SSH='/usr/bin/sshpass -e ssh' /usr/bin/svn export  --username 'svnread' --password 'onlyread' --non-interactive svn+ssh://svnread@kelev.kaltura.com/usr/local/kalsource/backend/server/tags/$TAG "exports/$TAG")
 	else 
 		echo "Local cache found for $TAG. Skipping"
 	fi
