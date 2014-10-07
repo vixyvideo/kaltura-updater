@@ -2,12 +2,12 @@
 
 . bin/setup.sh
 
-$SCHEMAS="kaltura"
-$SCHEMAS="$SCHEMAS kaltura_sphinx_log"
-$SCHEMAS="$SCHEMAS kalturadw"
-$SCHEMAS="$SCHEMAS kalturadw_bisources"
-$SCHEMAS="$SCHEMAS kalturadw_ds"
-$SCHEMAS="$SCHEMAS kalturalog"
+SCHEMAS="kaltura"
+SCHEMAS="$SCHEMAS kaltura_sphinx_log"
+SCHEMAS="$SCHEMAS kalturadw"
+SCHEMAS="$SCHEMAS kalturadw_bisources"
+SCHEMAS="$SCHEMAS kalturadw_ds"
+SCHEMAS="$SCHEMAS kalturalog"
 
 for SCHEMA in $SCHEMAS 
 do
