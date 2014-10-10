@@ -5,18 +5,18 @@ if [ "$SETUP" != "1" ]; then
 fi
 
 #init exports caching folder, if missing
-if [ ! -d "exports" ];
+if [ ! -d "$EXPORT_PATH" ];
 then
-	mkdir exports
+	mkdir $EXPORT_PATH
 fi
 
 for TAG in $RELEASES
 do
-	echo "--- Checking export/$TAG"
-	if [ ! -d "exports/$TAG" ]; 
+	echo "--- Checking $EXPORT_PATH/$TAG"
+	if [ ! -d "$EXPORT_PATH/$TAG" ];
 	then
 		echo "--- No local cache for $TAG found. Starting export"
-	    $(SSHPASS=onlyread SVN_SSH='/usr/bin/sshpass -e ssh' /usr/bin/svn export  --username 'svnread' --password 'onlyread' svn+ssh://svnread@kelev.kaltura.com/usr/local/kalsource/backend/server/RELEASES/$TAG "exports/$TAG")
+	  sshpass -p onlyread svn export svn+ssh://svnread@kelev.kaltura.com/usr/local/kalsource/backend/server/tags/$TAG "$EXPORT_PATH/$TAG"
 	else 
 		echo "--- Local cache found for $TAG. Skipping"
 	fi

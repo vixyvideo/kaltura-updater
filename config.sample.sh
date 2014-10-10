@@ -18,4 +18,6 @@ RELEASES="$RELEASES gemini_2013_07_16_1"
 MYSQL_ROOT="root"
 MYSQL_ROOT_PW=""
 
+EXPORT_PATH="exports"
+
 KALTURA_INSTALL="/opt/kaltura"
