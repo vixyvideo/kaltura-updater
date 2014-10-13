@@ -9,3 +9,6 @@ echo "-- Checkout all releases to exports"
 
 echo "-- Creating instance configurations"
 . bin/configure.sh
+
+echo "-- Creating instance configurations"
+. bin/run-update.sh
