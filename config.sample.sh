@@ -21,3 +21,5 @@ MYSQL_ROOT_PW=""
 EXPORT_PATH="exports"
 
 KALTURA_INSTALL="/opt/kaltura"
+
+LOG_PATH="/tmp"

@@ -18,4 +18,8 @@ if [ -z $MYSQL_ROOT_PW ]; then
  echo "MYSQL_ROOT setting not configured"
 fi
 
+if [ -z $LOG_PATH ]; then
+ LOG_PATH="/tmp"
+fi
+
 SETUP=1
