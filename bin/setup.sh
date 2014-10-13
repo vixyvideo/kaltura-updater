@@ -10,4 +10,12 @@ fi
 
 # Perhaps some prompting?
 
+if [ -z $MYSQL_ROOT ]; then
+ echo "MYSQL_ROOT setting not configured"
+fi
+
+if [ -z $MYSQL_ROOT_PW ]; then
+ echo "MYSQL_ROOT setting not configured"
+fi
+
 SETUP=1

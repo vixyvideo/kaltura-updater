@@ -6,3 +6,6 @@ echo "-- Parse & prompt update"
 
 echo "-- Checkout all releases to exports"
 . bin/export.sh
+
+echo "-- Creating instance configurations"
+. bin/configure.sh
