@@ -1,5 +1,7 @@
 #DO NOT USE THIS ON A PRODUCTION SERVER! NO WARRANTY
 
+#THIS DOCUMENT IS IN DRAFT STATE
+
 #Prerequisites
 Install the following tools to aid in the update process. 
 
@@ -232,7 +234,7 @@ Shutdown sphinx
 > service kaltura-shpinx stop
 
 Backup and move sphinx data
-> mv /opt/kaltura/sphinx/kaltura* [bacup]
+> mv /opt/kaltura/sphinx/kaltura* [backup]
 
 Backup and move sphinx binlogs
 > mv /opt/kaltura/log/sphinx/data/binlog.* [backup]
