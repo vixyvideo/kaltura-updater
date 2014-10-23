@@ -124,4 +124,30 @@ Run the follwing script:
 
 > bin/configure.sh
 
-This will supply the required configuration files for all releases. 
+This will supply the required configuration files for all exported releases. 
+
+###4.5 Execute legacy upgrades
+Before starting the upgrade run:
+
+> service kaltura-shpinx start
+
+Some updates need sphinx to be running, after all upgrades are completed. We will restore & reindex shpinx later on. 
+
+Run:
+
+> bin/update.sh
+
+This might take anywhere between 1-2 hours depending on how many releases you intend to upgrade. While upgrading you can watch the status by using:
+
+> tail -f [log]
+
+###4.6 Verrify the upgrades
+Inspect the run-update log for your upgrade, and inspect errors if they occured. For failed upgrades you will have to inpsect those files and compare them to the results. If a lot of them occured, fix them, and repeat from step 2.4. 
+
+###4.7 Run current kaltura updates
+After all legacy upgrades have been completed run the RMP upgrades. 
+
+> /opt/kaltura/bin/kaltura-db-update.sh
+> /opt/kaltura/bin/kaltura-config-all.sh
+
+#5 Fixing various issues
