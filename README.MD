@@ -22,7 +22,7 @@ https://github.com/kaltura/platform-install-packages/blob/master/doc/install-kal
 ### 1.1 Verify
 After succesfully installing kaltura. First run:
 
-/opt/kaltura/bin/kaltura-sanity.sh
+> /opt/kaltura/bin/kaltura-sanity.sh
 
 Only when everything passes. Proceed to the next step.
 
@@ -203,7 +203,7 @@ Import uiconfs
 > mysql -uroot -p kaltura < [step 1.3 uiconf export.sql]
 
 Redeploy uiconfs
-php /opt/kaltura/app/deployment/uiconf/deploy_v2.php --ini="/opt/kaltura/web/flash/kmc/v5.37.27/config.ini"
+> php /opt/kaltura/app/deployment/uiconf/deploy_v2.php --ini="/opt/kaltura/web/flash/kmc/v5.37.27/config.ini"
 
 ###6.3 Restore dynamic enums
 Clear dynamic enums
@@ -224,3 +224,35 @@ Clear profiles
 
 Import profiles
 > mysql -uroot -p kaltura < [step 1.3 delivery export.sql]
+
+###6.5 Rebuild sphinx
+Because sphinx was on during all the upgrades, it probably has been seriously mangled. 
+
+Shutdown sphinx
+> service kaltura-shpinx stop
+
+Backup and move sphinx data
+> mv /opt/kaltura/sphinx/kaltura* [bacup]
+
+Backup and move sphinx binlogs
+> mv /opt/kaltura/log/sphinx/data/binlog.* [backup]
+
+Start sphinx again
+> service kaltura-sphinx start
+
+Check sphinx is running
+> service kaltura-sphinx status
+
+Reindex site
+> for FILE in $(ls /opt/kaltura/app/deployment/base/scripts/*Sphinx*); do php $FILE; done
+
+If any errors occur duing the reindexing. Also reexecute the install & insert scripts. 
+
+---
+
+###7 Verrify the new installation
+After all the steps above have been completed, rerun the execute script to check the system status/
+
+> /opt/kaltura/bin/kaltura-sanity.sh
+
+At this stage, the datawarehouse has not yet been updated. So ignore any DWH related issues.
