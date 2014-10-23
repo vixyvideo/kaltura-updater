@@ -22,4 +22,7 @@ EXPORT_PATH="exports"
 
 KALTURA_INSTALL="/opt/kaltura"
 
-LOG_PATH="/tmp"
+LOG_PATH="/root/kaltura-inst/logs"
+
+SERVICE_URL="http://[host]"
+WEB_DIR="/opt/kaltura/web"
