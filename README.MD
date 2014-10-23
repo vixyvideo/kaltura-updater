@@ -94,10 +94,10 @@ Import the contents of your production servers /opt/kaltura/web to the new serve
 
 ---
 
-### Upgrading
+# 3 Upgrading
 After completing the setup phases. Execute the following steps to start the kaltura upgrade.
 
-#1.1 Create config file
+###3.1 Create config file
 Implement the suplied config.sample.sh as config.sh. Take note:
 
 - Select only the releases that apply to your upgrade. 
@@ -105,21 +105,21 @@ Implement the suplied config.sample.sh as config.sh. Take note:
 - Configure the root user & password to avoid authentication issues.
 - Configure the rest to your own specification.
 
-#1.2 Add the kaltura svn host to the known_hosts file
+###3.2 Add the kaltura svn host to the known_hosts file
 Execute:
 
 > svn export svn+ssh://svnread@kelev.kaltura.com/usr/local/kalsource/backend/server/tags/falcon_2012_08_20 
 
 You can just cancel after the host has been added.
 
-#1.3 Export releases
+###3.3 Export releases
 Run the following script:
 
 > bin/export.sh
 
 This will build all the releases for upgrading. 
 
-#1.4 Configure releases
+###4.4 Configure releases
 Run the follwing script:
 
 > bin/configure.sh
