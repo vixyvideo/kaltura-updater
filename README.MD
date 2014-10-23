@@ -15,6 +15,20 @@ yum install svn sshpass
 To aid in database schema comparisons, install mysqlworkbench. With this tool you will be able to compare database dumps, and create delta alter scripts to fix any missed updates. 
 
 ---
+# Important files
+Kaltura configuration files:
+> /opt/kaltura/app/configurations/*.ini
+
+Kaltura log files
+> /opt/kaltura/log
+
+Kaltura deployment scripts for rebuilding parts of kaltura and defaults
+> /opt/kaltura/app/deployment
+
+Kaltura 9x bin, installing & configuring
+> /opt/kaltura/bin 
+
+---
 
 # 1 Normal installation
 Before upgrading any Kaltura release. You should first install and verify that the new Kaltura release is working correctly. Installing Kaltura has been  documented on github. It is advised you use the new RPM based installation. 
