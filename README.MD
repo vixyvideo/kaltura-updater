@@ -148,6 +148,33 @@ Inspect the run-update log for your upgrade, and inspect errors if they occured.
 After all legacy upgrades have been completed run the RMP upgrades. 
 
 > /opt/kaltura/bin/kaltura-db-update.sh
+And 
 > /opt/kaltura/bin/kaltura-config-all.sh
 
-#5 Fixing various issues
+#5 Verrify schema state
+After running all upgrades&updates, we need to check the schema for any misses. This is where the backups of the healthy system come in hand. Import the healthy exports into another mysql server.
+
+###5.1 Export schema states
+On the healthy system
+> mysqldump -uroot -p --routines --no-data kaltura > kaltura.healthy.sql
+
+On the updated system
+> mysqldump -uroot -p --routines --no-data kaltura > kaltura.update.sql 
+
+###5.2 Compare and create delta script
+Open mysql-workbench, create a new schema and navigate to: database > synchronize with any source. 
+
+As the source select the kaltura.healthy.sql
+As the destination select the kaltura.update.sql
+Specify the alter script file to your own liking
+
+Continue the wizzard to completion.
+
+###5.3 Inspect delta alter file
+Inspect the generated alterscript. Take note that if you have any add column statements, you might have a missed update. Because new fields probably need to be migrated, take extra care inspecting those. 
+
+###5.4 Run the alterscript
+Exectute the alter script on the upgraded system. 
+
+###5.5 Repeat
+Mysqlworkbench is not perfect. Sometimes you will need to repeat the process until the wizzard no longer finds any differences between healthy and upgraded. 
