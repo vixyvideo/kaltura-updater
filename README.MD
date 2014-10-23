@@ -17,19 +17,19 @@ To aid in database schema comparisons, install mysqlworkbench. With this tool yo
 ---
 
 # 1 Normal installation
-Before upgrading any kaltura release. You should first install and verrify that the new kaltura release is working correctly. Installing kaltura has been  documented on github. It is advised you use the new RPM based installation. 
+Before upgrading any Kaltura release. You should first install and verify that the new Kaltura release is working correctly. Installing Kaltura has been  documented on github. It is advised you use the new RPM based installation. 
 
 https://github.com/kaltura/platform-install-packages/blob/master/doc/install-kaltura-redhat-based.md#non-ssl-step-by-step-installation
 
 ### 1.1 Verify
-After succesfully installing kaltura. First run:
+After successfully installing Kaltura. First run:
 
 > /opt/kaltura/bin/kaltura-sanity.sh
 
 Only when everything passes. Proceed to the next step.
 
-### 1.2 Export working kaltura schemas
-Export the following kaltura schemas:
+### 1.2 Export working Kaltura schemas
+Export the following Kaltura schemas:
 
 - kaltura
 - kalturadw
@@ -50,22 +50,22 @@ While upgrading kaltura, some data migrations are missed. These are:
 
 The exporting is best done by using adminer or phpmyadmin. 
 
-### 1.4 Export routines and triggers separatly
-Just in case you need to restore all default triggers and routines later on, please export and save them in sepearte files. Export the triggers and routines is done as follows:
+### 1.4 Export routines and triggers separately
+Just in case you need to restore all default triggers and routines later on, please export and save them in separate files. Export the triggers and routines is done as follows:
 
 > mysqldump -uroot -p --routines --no-create-info --no-data --no-create-db --skip-opt [schema] > [schema].routines.sql
 
-Repeat this step for all kaltura schemas. 
+Repeat this step for all Kaltura schemas. 
 
 ### 1.5 Register triggers and procedures 
-Open the mysql information_schema database in phpmyadmin or adminer. Save or note all records in: information_schema.triggers and information_schema.procedures. This is important because you will be able to check if the system has been succesfully upgraded. 
+Open the mysql information_schema database in phpmyadmin or adminer. Save or note all records in: information_schema.triggers and information_schema.procedures. This is important because you will be able to check if the system has been successfully upgraded. 
 
 ---
 
 # 2 Setup the upgrade
-After installing, verrifying and exporting the healthy kaltura system. We setup the actual upgrade process. 
+After installing, verifying and exporting the healthy Kaltura system. We setup the actual upgrade process. 
 
-### 2.2 Stop kaltura services
+### 2.2 Stop Kaltura services
 
 > service kaltura-monit stop
 > service kaltura-batch stop
@@ -82,7 +82,7 @@ Drop the following schemas:
 - kaltura_sphinx_log
 
 ### 2.4 Import production database
-Import the production database from a backup, or any other sqldump. After restoration, please verrify that you have the following databases again: 
+Import the production database from a backup, or any other sqldump. After restoration, please verify that you have the following databases again: 
 
 - kaltura
 - kalturadw
@@ -97,7 +97,7 @@ Import the contents of your production servers /opt/kaltura/web to the new serve
 ---
 
 # 3 Upgrading
-After completing the setup phases. Execute the following steps to start the kaltura upgrade.
+After completing the setup phases. Execute the following steps to start the Kaltura upgrade.
 
 ###3.1 Create config file
 Implement the suplied config.sample.sh as config.sh. Take note:
@@ -107,7 +107,7 @@ Implement the suplied config.sample.sh as config.sh. Take note:
 - Configure the root user & password to avoid authentication issues.
 - Configure the rest to your own specification.
 
-###3.2 Add the kaltura svn host to the known_hosts file
+###3.2 Add the Kaltura svn host to the known_hosts file
 Execute:
 
 > svn export svn+ssh://svnread@kelev.kaltura.com/usr/local/kalsource/backend/server/tags/falcon_2012_08_20 
@@ -122,7 +122,7 @@ Run the following script:
 This will build all the releases for upgrading. 
 
 ###4.4 Configure releases
-Run the follwing script:
+Run the following script:
 
 > bin/configure.sh
 
@@ -143,10 +143,10 @@ This might take anywhere between 1-2 hours depending on how many releases you in
 
 > tail -f [log]
 
-###4.6 Verrify the upgrades
-Inspect the run-update log for your upgrade, and inspect errors if they occured. For failed upgrades you will have to inpsect those files and compare them to the results. If a lot of them occured, fix them, and repeat from step 2.4. 
+###4.6 Verify the upgrades
+Inspect the run-update log for your upgrade, and inspect errors if they occurred. For failed upgrades you will have to inspect those files and compare them to the results. If a lot of them occurred, fix them, and repeat from step 2.4. 
 
-###4.7 Run current kaltura updates
+###4.7 Run current Kaltura updates
 After all legacy upgrades have been completed run the RMP upgrades. 
 
 > /opt/kaltura/bin/kaltura-db-update.sh
@@ -155,7 +155,7 @@ And
 
 ---
 
-#5 Verrify schema state
+#5 Verify schema state
 After running all upgrades&updates, we need to check the schema for any misses. This is where the backups of the healthy system come in hand. Import the healthy exports into another mysql server.
 
 ###5.1 Export schema states
@@ -172,21 +172,21 @@ As the source select the kaltura.healthy.sql
 As the destination select the kaltura.update.sql
 Specify the alter script file to your own liking
 
-Continue the wizzard to completion.
+Continue the wizard to completion.
 
 ###5.3 Inspect delta alter file
 Inspect the generated alterscript. Take note that if you have any add column statements, you might have a missed update. Because new fields probably need to be migrated, take extra care inspecting those. 
 
-###5.4 Run the alterscript
-Exectute the alter script on the upgraded system. 
+###5.4 Run the alter script
+Execute the alter script on the upgraded system. 
 
 ###5.5 Repeat
-Mysqlworkbench is not perfect. Sometimes you will need to repeat the process until the wizzard no longer finds any differences between healthy and upgraded. 
+Mysql workbench is not perfect. Sometimes you will need to repeat the process until the wizard no longer finds any differences between healthy and upgraded. 
 
 ---
 
 #6 Restore data
-This step restores missed or otherwise default provided data into kaltura.
+This step restores missed or otherwise default provided data into Kaltura.
 
 ###6.1 Partner data
 Clear all system partners:
@@ -195,7 +195,7 @@ Clear all system partners:
 Import healthy system partners:
 > mysql -uroot -p kaltura < [step 1.3 partner export.sql]
 
-Check the batch user secret in /opt/kaltura/app/configurations/batch against the user in the datbase. And change if needed. 
+Check the batch user secret in /opt/kaltura/app/configurations/batch against the user in the database. And change if needed. 
 
 ###6.2 Default uiconfs
 Clear uiconfs 
@@ -245,16 +245,16 @@ Start sphinx again
 Check sphinx is running
 > service kaltura-sphinx status
 
-Reindex site
+Re-index site
 > for FILE in $(ls /opt/kaltura/app/deployment/base/scripts/*Sphinx*); do php $FILE; done
 
-If any errors occur duing the reindexing. Also reexecute the install & insert scripts. 
+If any errors occur during the re-indexing. Also re-execute the install & insert scripts. 
 
 ---
 
-###7 Verrify the new installation
+###7 Verify the new installation
 After all the steps above have been completed, rerun the execute script to check the system status/
 
 > /opt/kaltura/bin/kaltura-sanity.sh
 
-At this stage, the datawarehouse has not yet been updated. So ignore any DWH related issues.
+At this stage, the data warehouse has not yet been updated. So ignore any DWH related issues.
