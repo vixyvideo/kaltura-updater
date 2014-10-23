@@ -151,6 +151,8 @@ After all legacy upgrades have been completed run the RMP upgrades.
 And 
 > /opt/kaltura/bin/kaltura-config-all.sh
 
+---
+
 #5 Verrify schema state
 After running all upgrades&updates, we need to check the schema for any misses. This is where the backups of the healthy system come in hand. Import the healthy exports into another mysql server.
 
@@ -178,3 +180,47 @@ Exectute the alter script on the upgraded system.
 
 ###5.5 Repeat
 Mysqlworkbench is not perfect. Sometimes you will need to repeat the process until the wizzard no longer finds any differences between healthy and upgraded. 
+
+---
+
+#6 Restore data
+This step restores missed or otherwise default provided data into kaltura.
+
+###6.1 Partner data
+Clear all system partners:
+> mysql -uroot -p kaltura -e "DELETE FROM `partner` WHERE `id` < 100"
+
+Import healthy system partners:
+> mysql -uroot -p kaltura < [step 1.3 partner export.sql]
+
+Check the batch user secret in /opt/kaltura/app/configurations/batch against the user in the datbase. And change if needed. 
+
+###6.2 Default uiconfs
+Clear uiconfs 
+> mysql -uroot -p kaltura -e "DELETE FROM `ui_conf` WHERE `partner_id` < 100"
+
+Import uiconfs
+> mysql -uroot -p kaltura < [step 1.3 uiconf export.sql]
+
+Redeploy uiconfs
+php /opt/kaltura/app/deployment/uiconf/deploy_v2.php --ini="/opt/kaltura/web/flash/kmc/v5.37.27/config.ini"
+
+###6.3 Restore dynamic enums
+Clear dynamic enums
+>mysql -uroot -p kaltura -e "TRUNCATE `dynamic_enum`"
+
+Import enums
+> mysql -uroot -p kaltura < [step 1.3 dynamic enum export.sql]
+
+Delete kaltura classmap caches
+> rm -Rf /opt/kaltura/app/cache/*
+
+To avoid APC caches as wel, restart apache
+> service httpd restart
+
+###6.4 Restore delivery profiles
+Clear profiles
+>mysql -uroot -p kaltura -e "TRUNCATE `delivery_profile`"
+
+Import profiles
+> mysql -uroot -p kaltura < [step 1.3 delivery export.sql]
