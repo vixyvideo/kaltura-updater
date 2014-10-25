@@ -58,6 +58,6 @@ CREATE TABLE kalturadw.`dwh_hourly_events_context_app_devices` (
   KEY (`date_id`, `hour_id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8
 PARTITION BY RANGE (date_id)
-(PARTITION p_20141025 VALUES LESS THAN (20141026) ENGINE = INNODB);
+(PARTITION @PARTITION_NAME@ VALUES LESS THAN (@PARTITION_VALUE@) ENGINE = INNODB);
 
 CALL kalturadw.add_monthly_partition_for_table('dwh_hourly_events_context_app_devices');

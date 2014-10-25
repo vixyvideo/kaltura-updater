@@ -17,6 +17,6 @@ CREATE TABLE dwh_fact_errors (
 	UNIQUE KEY (`error_date_id`,`error_object_id`,`error_object_type_id`,`error_time`)
 	) ENGINE=INNODB DEFAULT CHARSET=latin1
 	/*!50100 PARTITION BY RANGE (error_date_id)
-	(PARTITION p_20141025 VALUES LESS THAN (20141026) ENGINE = INNODB)*/;
+	(PARTITION @PARTITION_NAME@ VALUES LESS THAN (@PARTITION_VALUE@) ENGINE = INNODB)*/;
 
 CALL add_daily_partition_for_table('dwh_fact_errors');

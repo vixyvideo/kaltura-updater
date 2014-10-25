@@ -101,7 +101,7 @@ CREATE TABLE `dwh_fact_plays` (
   KEY `play_hour_id_play_date_id_partner_id` (play_hour_id, play_date_id, partner_id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8
 /*!50100 PARTITION BY RANGE (play_date_id)
-(PARTITION p_20141025 VALUES LESS THAN (20141026) ENGINE = INNODB) */;
+(PARTITION @PARTITION_NAME@ VALUES LESS THAN (@PARTITION_VALUE@) ENGINE = INNODB) */;
 
 CALL add_daily_partition_for_table('dwh_fact_plays');
 
@@ -241,7 +241,7 @@ CREATE TABLE kalturadw.`dwh_hourly_plays_partner` (
   KEY (`date_id`, `hour_id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8
 PARTITION BY RANGE (date_id)
-(PARTITION p_20141025 VALUES LESS THAN (20141026) ENGINE = INNODB);
+(PARTITION @PARTITION_NAME@ VALUES LESS THAN (@PARTITION_VALUE@) ENGINE = INNODB);
 
 CALL kalturadw.add_monthly_partition_for_table('dwh_hourly_plays_partner');
 
@@ -257,7 +257,7 @@ CREATE TABLE kalturadw.`dwh_hourly_plays_entry` (
    KEY `entry_id` (`entry_id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8
 PARTITION BY RANGE (date_id)
-(PARTITION p_20141025 VALUES LESS THAN (20141026) ENGINE = INNODB);
+(PARTITION @PARTITION_NAME@ VALUES LESS THAN (@PARTITION_VALUE@) ENGINE = INNODB);
 
 CALL kalturadw.add_monthly_partition_for_table('dwh_hourly_plays_entry');
 
@@ -606,7 +606,7 @@ CREATE TABLE kalturadw.`dwh_hourly_events_live_entry` (
   KEY `entry_id` (`entry_id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8
 PARTITION BY RANGE (date_id)
-(PARTITION p_20141025 VALUES LESS THAN (20141026) ENGINE = INNODB);
+(PARTITION @PARTITION_NAME@ VALUES LESS THAN (@PARTITION_VALUE@) ENGINE = INNODB);
 
 USE kalturadw;
 
