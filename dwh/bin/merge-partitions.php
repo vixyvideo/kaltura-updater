@@ -25,7 +25,7 @@ while ( $partition = mysql_fetch_array($partitions ) ){
 	echo "Dropping {$schema}.{$table}:{$column}\n";
 	mysql_query("ALTER TABLE {$schema}.{$table} REMOVE PARTITIONING;");
 
-	echo "- Creating archive partition less than {$archive}\n";
+	echo "- Creating archive partition p_{$name} {$value}\n";
 	mysql_query("ALTER TABLE {$schema}.{$table} PARTITION BY RANGE ({$column}) (partition p_{$name} VALUES LESS THAN ({$value}));");
 	echo mysql_error();
 }
