@@ -42,7 +42,7 @@ After successfully installing Kaltura. First run:
 
 Only when everything passes. Proceed to the next step.
 
-### 1.2 Export working Kaltura schemas
+### 1.2 Export working Kaltura schemas & routines
 Export the following Kaltura schemas:
 
 - kaltura
@@ -52,7 +52,7 @@ Export the following Kaltura schemas:
 - kalturalog
 - kaltura_sphinx_log
 
-> mysqldump -uroot -p --routines schema > [schema].sql
+> bin/export-structure.sh <root-user> <root-pw> <export path>
 
 ### 1.3 Export data 
 While upgrading kaltura, some data migrations are missed. These are:
@@ -64,14 +64,7 @@ While upgrading kaltura, some data migrations are missed. These are:
 
 The exporting is best done by using adminer or phpmyadmin. 
 
-### 1.4 Export routines and triggers separately
-Just in case you need to restore all default triggers and routines later on, please export and save them in separate files. Export the triggers and routines is done as follows:
-
-> mysqldump -uroot -p --routines --no-create-info --no-data --no-create-db --skip-opt [schema] > [schema].routines.sql
-
-Repeat this step for all Kaltura schemas. 
-
-### 1.5 Register triggers and procedures 
+### 1.4 Register triggers and procedures 
 Open the mysql information_schema database in phpmyadmin or adminer. Save or note all records in: information_schema.triggers and information_schema.procedures. This is important because you will be able to check if the system has been successfully upgraded. 
 
 ---
