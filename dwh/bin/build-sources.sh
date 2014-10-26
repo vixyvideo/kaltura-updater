@@ -4,7 +4,7 @@
 
 echo "Building DWH sources"
 
-SOURCE_DIR="sources_2"
+SOURCE_DIR="sources"
 BUILD_DIR="build"
 
 if [ ! -d $SOURCE_DIR ];
