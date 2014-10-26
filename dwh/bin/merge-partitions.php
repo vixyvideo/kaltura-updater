@@ -17,7 +17,8 @@ mysql_query("grant all privileges on *.* to 'etl'@'localhost';");
 mysql_query("grant all privileges on *.* to 'etl'@'127.0.0.1';");
 
 $partitions = mysql_query("SELECT DISTINCT TABLE_SCHEMA, TABLE_NAME, PARTITION_EXPRESSION FROM `PARTITIONS` where PARTITION_NAME is not null AND TABLE_SCHEMA = 'kalturadw'");
-$archive = date('Ymd');
+$value = date('Ymd');
+$name = date('Ymd', time() - 24*60*60 );
 
 while ( $partition = mysql_fetch_array($partitions ) ){
 	list($schema,$table,$column) = $partition;
@@ -25,6 +26,6 @@ while ( $partition = mysql_fetch_array($partitions ) ){
 	mysql_query("ALTER TABLE {$schema}.{$table} REMOVE PARTITIONING;");
 
 	echo "- Creating archive partition less than {$archive}\n";
-	mysql_query("ALTER TABLE {$schema}.{$table} PARTITION BY RANGE ({$column}) (partition p_{$archive} VALUES LESS THAN ({$archive}));");
+	mysql_query("ALTER TABLE {$schema}.{$table} PARTITION BY RANGE ({$column}) (partition p_{$name} VALUES LESS THAN ({$value}));");
 	echo mysql_error();
 }
