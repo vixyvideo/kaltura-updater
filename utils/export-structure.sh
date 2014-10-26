@@ -37,4 +37,11 @@ do
   sed -i "s^CREATE TABLE ^CREATE TABLE \`$SCHEMA\`.^" "$3/$SCHEMA.routines.sql"
   sed -i "s^FUNCTION ^FUNCTION \`$SCHEMA\`.^" "$3/$SCHEMA.routines.sql"
   sed -i "s^PROCEDURE ^PROCEDURE \`$SCHEMA\`.^" "$3/$SCHEMA.routines.sql"
+
+  echo "Exporting full without partitions for $SCHEMA to $SCHEMA.routines.sql";
+  mysqldump -u$1 -p$2 --routines --no-data --skip-opt $SCHEMA | sed 's/\/\*\!50100 PARTITION BY.*/;/g' | sed 's/(PARTITION.*//g' | sed 's/PARTITION.*//g' > "$3/$SCHEMA.nopartition.sql" 
+
+  sed -i "s^CREATE TABLE ^CREATE TABLE \`$SCHEMA\`.^" "$3/$SCHEMA.nopartition.sql"
+  sed -i "s^FUNCTION ^FUNCTION \`$SCHEMA\`.^" "$3/$SCHEMA.nopartition.sql"
+  sed -i "s^PROCEDURE ^PROCEDURE \`$SCHEMA\`.^" "$3/$SCHEMA.nopartition.sql"
 done
