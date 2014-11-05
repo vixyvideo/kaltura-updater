@@ -31,5 +31,9 @@ if [ ! -d LOG_FOLDER ]; then
   mkdir $LOG_FOLDER
 fi
 
+if [ -d "$LOG_PATH/current" ]; then
+  rm "$LOG_PATH/current"
+fi
+ln -s "$LOG_FOLDER" "$LOG_PATH/current" 
 
 SETUP=1
