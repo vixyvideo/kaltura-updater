@@ -22,4 +22,14 @@ if [ -z $LOG_PATH ]; then
  LOG_PATH="/tmp"
 fi
 
+
+
+STAMP=$(date +%Y-%m-%d_%T)   
+LOG_FOLDER="$LOG_PATH/$STAMP"
+
+if [ ! -d LOG_FOLDER ]; then
+  mkdir $LOG_FOLDER
+fi
+
+
 SETUP=1

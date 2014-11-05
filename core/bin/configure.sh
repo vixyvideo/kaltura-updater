@@ -7,6 +7,8 @@ fi
 for RELEASE in $RELEASES; do
  echo "--- Creating configuration for $RELEASE"
 
+ mkdir "$LOG_PATH/$STAMP-kaltura"
+
  cp asset/db.template.ini "$EXPORT_PATH/$RELEASE/configurations/db.ini"
  cp asset/local.template.ini "$EXPORT_PATH/$RELEASE/configurations/local.ini"
  cp asset/dc_config.template.ini "$EXPORT_PATH/$RELEASE/configurations/dc_config.ini"
@@ -23,15 +25,16 @@ for RELEASE in $RELEASES; do
  sed -i "s^@SERVICE_URL@^$SERVICE_URL^" "$EXPORT_PATH/$RELEASE/configurations/dc_config.ini"
  sed -i "s^@WEB_DIR@^$WEB_DIR^" "$EXPORT_PATH/$RELEASE/configurations/dc_config.ini"
 
+  
 
- sed -i "s^@LOG_DIR@^$EXPORT_PATH/$RELEASE/log^" "$EXPORT_PATH/$RELEASE/configurations/logger.ini"
+ sed -i "s^@LOG_DIR@^$LOG_FOLDER^" "$EXPORT_PATH/$RELEASE/configurations/logger.ini"
 
- if [ ! -d "$EXPORT_PATH/$RELEASE/log" ];
- then
- 	mkdir $EXPORT_PATH/$RELEASE/log
- fi
+ # if [ ! -d "$EXPORT_PATH/$RELEASE/log" ];
+ # then
+ # 	mkdir $EXPORT_PATH/$RELEASE/log
+ # fi
 
- for FILE in $(find $EXPORT_PATH/$RELEASE/deployment -type f -name '*.php'); do sed -i "s^usleep^#usleep^" $FILE; done
- for FILE in $(find $EXPORT_PATH/$RELEASE/deployment -type f -name '*.php'); do sed -i "s^sleep^#sleep^" $FILE; done
+ # for FILE in $(find $EXPORT_PATH/$RELEASE/deployment -type f -name '*.php'); do sed -i "s^usleep^#usleep^" $FILE; done
+ # for FILE in $(find $EXPORT_PATH/$RELEASE/deployment -type f -name '*.php'); do sed -i "s^sleep^#sleep^" $FILE; done
 
 done;
