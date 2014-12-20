@@ -13,8 +13,6 @@ BEGIN
     DECLARE c_partitions CURSOR FOR SELECT DISTINCT date_id, hour_id FROM kalturadw.dwh_hourly_events_entry;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
 
-    OPEN c_partitions;
-
     TRUNCATE TABLE dwh_entry_plays_views;
 
     INSERT INTO dwh_entry_plays_views(entry_id, plays, views)
