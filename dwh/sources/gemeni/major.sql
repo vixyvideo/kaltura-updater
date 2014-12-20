@@ -847,6 +847,140 @@ VALUES ('app_devices', 'dwh_hourly_events_context_app_devices', 'context_id,appl
 
 UPDATE kalturadw_ds.staging_areas  SET post_transfer_aggregations = REPLACE(post_transfer_aggregations, ')',',\'app_devices\')') WHERE process_id in (1,3);
 
+/** 6144 **/
+
+use kalturadw;
+
+drop table if exists `dwh_dim_category_entry`;
+
+create table `dwh_dim_category_entry` (
+	`id` int(11) NOT NULL,
+	`partner_id` int(11) NOT NULL,
+    `entry_id` varchar(20) NOT NULL,
+    `category_id` int(11) NOT NULL,
+	`created_at` DATETIME,
+	`updated_at` DATETIME,
+	`status_id` int(11) NOT NULL,
+	`dwh_creation_date` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`dwh_update_date` TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+	PRIMARY KEY (`id`),
+	KEY `category_id` (`category_id`),
+	KEY `entry_id` (`entry_id`)
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
+
+CREATE TRIGGER `kalturadw`.`dwh_dim_category_entry_setcreationtime_oninsert` BEFORE INSERT
+    ON `kalturadw`.`dwh_dim_category_entry`
+    FOR EACH ROW
+	SET new.dwh_creation_date = NOW();
+
+USE `kalturadw_bisources`;
+
+DROP TABLE IF EXISTS `bisources_category_entry_status`;
+
+CREATE TABLE `bisources_category_entry_status` (
+  `category_entry_status_id` INT(11) NOT NULL,
+  `category_entry_status_name` VARCHAR(100) DEFAULT 'missing value',
+  PRIMARY KEY (`category_entry_status_id`)
+);
+
+INSERT INTO `bisources_category_entry_status`
+			(`category_entry_status_id`,`category_entry_status_name`)
+
+VALUES
+			(1,'PENDING'),
+			(2,'ACTIVE'),
+			(3,'DELETED'),
+			(4,'REJECTED');
+
+use `kalturadw`;
+
+DROP TABLE IF EXISTS `dwh_dim_category_entry_status`;
+
+CREATE TABLE `dwh_dim_category_entry_status` (
+  `category_entry_status_id` int(11) NOT NULL,
+  `category_entry_status_name` VARCHAR(100) DEFAULT 'missing value',
+  `dwh_creation_date` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `dwh_update_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ri_ind` TINYINT(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`category_entry_status_id`)
+) ENGINE=MYISAM;
+
+CREATE TRIGGER `kalturadw`.`dwh_dim_category_entry_status_setcreationtime_oninsert` BEFORE INSERT
+    ON `kalturadw`.`dwh_dim_category_entry_status`
+    FOR EACH ROW
+	SET new.dwh_creation_date = NOW();
+
+use kalturadw;
+
+drop table if exists `dwh_dim_category`;
+
+CREATE TABLE `dwh_dim_category` (
+	`category_id` INT(11) NOT NULL,
+	`parent_id` INT(11) NOT NULL,
+	`partner_id` INT(11) NOT NULL,
+	`name` VARCHAR(128) NOT NULL,
+	`full_name` TEXT,
+	`created_at` DATETIME,
+	`updated_at` DATETIME,
+	`status_id` INT(11) NOT NULL,
+	`kuser_id` INT(11),
+	`dwh_creation_date` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`dwh_update_date` TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+	PRIMARY KEY (`category_id`),
+	KEY `category_name` (`name`)
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
+
+CREATE TRIGGER `kalturadw`.`dwh_dim_category_setcreationtime_oninsert` BEFORE INSERT
+    ON `kalturadw`.`dwh_dim_category`
+    FOR EACH ROW
+	SET new.dwh_creation_date = NOW();
+
+
+USE `kalturadw_bisources`;
+
+DROP TABLE IF EXISTS `bisources_category_status`;
+
+CREATE TABLE `bisources_category_status` (
+  `category_status_id` INT(11) NOT NULL,
+  `category_status_name` VARCHAR(100) DEFAULT 'missing value',
+  PRIMARY KEY (`category_status_id`)
+);
+
+INSERT INTO `bisources_category_status`
+			(`category_status_id`,`category_status_name`)
+
+VALUES
+			(1,'UPDATING'),
+			(2,'ACTIVE'),
+			(3,'DELETED'),
+			(4,'PURGED');
+
+
+use `kalturadw`;
+
+DROP TABLE IF EXISTS `dwh_dim_category_status`;
+
+CREATE TABLE `dwh_dim_category_status` (
+  `category_status_id` int(11) NOT NULL,
+  `category_status_name` VARCHAR(100) DEFAULT 'missing value',
+  `dwh_creation_date` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `dwh_update_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ri_ind` TINYINT(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`category_status_id`)
+) ENGINE=MYISAM;
+
+CREATE TRIGGER `kalturadw`.`dwh_dim_category_status_setcreationtime_oninsert` BEFORE INSERT
+    ON `kalturadw`.`dwh_dim_category_status`
+    FOR EACH ROW
+	SET new.dwh_creation_date = NOW();
+INSERT INTO kalturadw_ds.pentaho_sequences VALUES(3,'dimensions/update_category.ktr',7,TRUE);
+INSERT INTO kalturadw_ds.pentaho_sequences VALUES(3,'dimensions/update_category_entry.ktr',8,TRUE);
+
+
+INSERT INTO `kalturadw`.`bisources_tables` (`table_name`, `to_update`) VALUES('category_entry_status',1);
+INSERT INTO `kalturadw`.`bisources_tables` (`table_name`, `to_update`) VALUES('category_status',1);
+
+
 /* 6145 */ 
 ALTER TABLE kalturadw.dwh_dim_file_sync 
 CHANGE COLUMN id id BIGINT(20),

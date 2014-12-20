@@ -17,27 +17,14 @@ BEGIN
 
     TRUNCATE TABLE dwh_entry_plays_views;
 
-    INSERT INTO dwh_entry_plays_views (entry_id, plays, views, updated_at)
-    SELECT entry_id, plays, views, DATE(20000101)
-    FROM entry_plays_views_before_08_2009;
-
-    read_loop: LOOP
-        FETCH c_partitions INTO v_date_id, v_hour_id;
-        IF v_done = 1 THEN
-         LEAVE read_loop;
-        END IF;
-
-        INSERT INTO dwh_entry_plays_views(entry_id, plays, views)
-        SELECT aggr.entry_id, IFNULL(SUM(count_plays), 0) plays, IFNULL(SUM(count_loads), 0) views
-        FROM kalturadw.dwh_hourly_events_entry aggr
-        WHERE date_id BETWEEN v_date_id AND v_date_id AND hour_id = v_hour_id
-        group by entry_id
-        ON DUPLICATE KEY UPDATE
-        plays = plays + VALUES(plays),
-        views = views + VALUES(views),
-        updated_at = DATE(20000101);
-    END LOOP read_loop;
-    CLOSE c_partitions;
+    INSERT INTO dwh_entry_plays_views(entry_id, plays, views)
+    SELECT aggr.entry_id, IFNULL(SUM(count_plays), 0) plays, IFNULL(SUM(count_loads), 0) views
+    FROM kalturadw.dwh_hourly_events_entry aggr
+    group by entry_id
+    ON DUPLICATE KEY UPDATE
+    plays = plays + VALUES(plays),
+    views = views + VALUES(views),
+    updated_at = DATE(20000101);
 
     UPDATE dwh_entry_plays_views p, dwh_dim_entries e
     SET p.updated_at = e.operational_measures_updated_at
