@@ -7,6 +7,6 @@ This is not a click and forget upgrader! Even with the scripts in this repo, exp
 ##Executing upgrades
 The upgrade process can be split off into 2 major parts: Kaltura core and Kaltura DWH (Analytics datawarehouse)
 
-Upgrade Core [core/README.MD](first)
+Upgrade Core [/core/README.MD](first)
 
-Upgrade DWH [dwh/README.MD](last)
+Upgrade DWH [/dwh/README.MD](last)
