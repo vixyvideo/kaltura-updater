@@ -1,6 +1,5 @@
 #DO NOT USE THIS ON A PRODUCTION SERVER! NO WARRANTY
-
-#THIS DOCUMENT IS IN DRAFT STATE
+Provided to you by http://www.vixyvideo.nl
 
 #Prerequisites
 Install the following tools to aid in the update process. 
@@ -26,12 +25,12 @@ Kaltura deployment scripts for rebuilding parts of kaltura and defaults
 > /opt/kaltura/app/deployment
 
 Kaltura 9x bin, installing & configuring
-> /opt/kaltura/bin 
+> /opt/kaltura/bin
 
 ---
 
 # 1 Normal installation
-Before upgrading any Kaltura release. You should first install and verify that the new Kaltura release is working correctly. Installing Kaltura has been  documented on github. It is advised you use the new RPM based installation. 
+Before upgrading any Kaltura release. You should first install and verify that the new Kaltura release is working correctly. Installing Kaltura has been  documented on github. It is advised you use the new RPM based installation.
 
 https://github.com/kaltura/platform-install-packages/blob/master/doc/install-kaltura-redhat-based.md#non-ssl-step-by-step-installation
 
@@ -54,7 +53,7 @@ Export the following Kaltura schemas:
 
 > bin/export-structure.sh <root-user> <root-pw> <export path>
 
-### 1.3 Export data 
+### 1.3 Export data
 While upgrading kaltura, some data migrations are missed. These are:
 
 - delivery_profile (Export all data)
@@ -62,15 +61,15 @@ While upgrading kaltura, some data migrations are missed. These are:
 - partner   (Export all partners with id < 100)
 - ui_conf  (Export all uiconfs belonging to partner < 100 )
 
-The exporting is best done by using adminer or phpmyadmin. 
+The exporting is best done by using adminer or phpmyadmin.
 
-### 1.4 Register triggers and procedures 
-Open the mysql information_schema database in phpmyadmin or adminer. Save or note all records in: information_schema.triggers and information_schema.procedures. This is important because you will be able to check if the system has been successfully upgraded. 
+### 1.4 Register triggers and procedures
+Open the mysql information_schema database in phpmyadmin or adminer. Save or note all records in: information_schema.triggers and information_schema.procedures. This is important because you will be able to check if the system has been successfully upgraded.
 
 ---
 
 # 2 Setup the upgrade
-After installing, verifying and exporting the healthy Kaltura system. We setup the actual upgrade process. 
+After installing, verifying and exporting the healthy Kaltura system. We setup the actual upgrade process.
 
 ### 2.2 Stop Kaltura services
 
@@ -79,7 +78,7 @@ After installing, verifying and exporting the healthy Kaltura system. We setup t
 > service kaltura-sphinx stop
 
 ### 2.3 Drop schemas
-Drop the following schemas: 
+Drop the following schemas:
 
 - kaltura
 - kalturadw
@@ -89,7 +88,7 @@ Drop the following schemas:
 - kaltura_sphinx_log
 
 ### 2.4 Import production database
-Import the production database from a backup, or any other sqldump. After restoration, please verify that you have the following databases again: 
+Import the production database from a backup, or any other sqldump. After restoration, please verify that you have the following databases again:
 
 - kaltura
 - kalturadw
@@ -99,7 +98,7 @@ Import the production database from a backup, or any other sqldump. After restor
 - kaltura_sphinx_log
 
 ### 2.5 Import production data
-Import the contents of your production servers /opt/kaltura/web to the new server. 
+Import the contents of your production servers /opt/kaltura/web to the new server.
 
 ---
 
@@ -109,15 +108,15 @@ After completing the setup phases. Execute the following steps to start the Kalt
 ###3.1 Create config file
 Implement the suplied config.sample.sh as config.sh. Take note:
 
-- Select only the releases that apply to your upgrade. 
-- Upgrades are executed in the order you configure them. 
+- Select only the releases that apply to your upgrade.
+- Upgrades are executed in the order you configure them.
 - Configure the root user & password to avoid authentication issues.
 - Configure the rest to your own specification.
 
 ###3.2 Add the Kaltura svn host to the known_hosts file
 Execute:
 
-> svn export svn+ssh://svnread@kelev.kaltura.com/usr/local/kalsource/backend/server/tags/falcon_2012_08_20 
+> svn export svn+ssh://svnread@kelev.kaltura.com/usr/local/kalsource/backend/server/tags/falcon_2012_08_20
 
 You can just cancel after the host has been added.
 
@@ -126,21 +125,21 @@ Run the following script:
 
 > bin/export.sh
 
-This will build all the releases for upgrading. 
+This will build all the releases for upgrading.
 
 ###4.4 Configure releases
 Run the following script:
 
 > bin/configure.sh
 
-This will supply the required configuration files for all exported releases. 
+This will supply the required configuration files for all exported releases.
 
 ###4.5 Execute legacy upgrades
 Before starting the upgrade run:
 
 > service kaltura-shpinx start
 
-Some updates need sphinx to be running, after all upgrades are completed. We will restore & reindex shpinx later on. 
+Some updates need sphinx to be running, after all upgrades are completed. We will restore & reindex shpinx later on.
 
 Run:
 
@@ -151,13 +150,15 @@ This might take anywhere between 1-2 hours depending on how many releases you in
 > tail -f [log]
 
 ###4.6 Verify the upgrades
-Inspect the run-update log for your upgrade, and inspect errors if they occurred. For failed upgrades you will have to inspect those files and compare them to the results. If a lot of them occurred, fix them, and repeat from step 2.4. 
+Inspect the run-update log for your upgrade, and inspect errors if they occurred. For failed upgrades you will have to inspect those files and compare them to the results. If a lot of them occurred, fix them, and repeat from step 2.4.
 
 ###4.7 Run current Kaltura updates
-After all legacy upgrades have been completed run the RMP upgrades. 
+After all legacy upgrades have been completed run the RMP upgrades.
 
+> php /opt/kaltura/app/deployment/updates/update.php
+And
 > /opt/kaltura/bin/kaltura-db-update.sh
-And 
+And
 > /opt/kaltura/bin/kaltura-config-all.sh
 
 ---
@@ -170,10 +171,10 @@ On the healthy system
 > mysqldump -uroot -p --routines --no-data kaltura > kaltura.healthy.sql
 
 On the updated system
-> mysqldump -uroot -p --routines --no-data kaltura > kaltura.update.sql 
+> mysqldump -uroot -p --routines --no-data kaltura > kaltura.update.sql
 
 ###5.2 Compare and create delta script
-Open mysql-workbench, create a new schema and navigate to: database > synchronize with any source. 
+Open mysql-workbench, create a new schema and navigate to: database > synchronize with any source.
 
 As the source select the kaltura.healthy.sql
 As the destination select the kaltura.update.sql
@@ -182,13 +183,13 @@ Specify the alter script file to your own liking
 Continue the wizard to completion.
 
 ###5.3 Inspect delta alter file
-Inspect the generated alterscript. Take note that if you have any add column statements, you might have a missed update. Because new fields probably need to be migrated, take extra care inspecting those. 
+Inspect the generated alterscript. Take note that if you have any add column statements, you might have a missed update. Because new fields probably need to be migrated, take extra care inspecting those.
 
 ###5.4 Run the alter script
-Execute the alter script on the upgraded system. 
+Execute the alter script on the upgraded system.
 
 ###5.5 Repeat
-Mysql workbench is not perfect. Sometimes you will need to repeat the process until the wizard no longer finds any differences between healthy and upgraded. 
+Mysql workbench is not perfect. Sometimes you will need to repeat the process until the wizard no longer finds any differences between healthy and upgraded.
 
 ---
 
@@ -202,10 +203,10 @@ Clear all system partners:
 Import healthy system partners:
 > mysql -uroot -p kaltura < [step 1.3 partner export.sql]
 
-Check the batch user secret in /opt/kaltura/app/configurations/batch against the user in the database. And change if needed. 
+Check the batch user secret in /opt/kaltura/app/configurations/batch against the user in the database. And change if needed.
 
 ###6.2 Default uiconfs
-Clear uiconfs 
+Clear uiconfs
 > mysql -uroot -p kaltura -e "DELETE FROM `ui_conf` WHERE `partner_id` < 100"
 
 Import uiconfs
@@ -235,7 +236,7 @@ Import profiles
 > mysql -uroot -p kaltura < [step 1.3 delivery export.sql]
 
 ###6.5 Rebuild sphinx
-Because sphinx was on during all the upgrades, it probably has been seriously mangled. 
+Because sphinx was on during all the upgrades, it probably has been seriously mangled.
 
 Shutdown sphinx
 > service kaltura-shpinx stop
@@ -255,7 +256,7 @@ Check sphinx is running
 Re-index site
 > for FILE in $(ls /opt/kaltura/app/deployment/base/scripts/*Sphinx*); do php $FILE; done
 
-If any errors occur during the re-indexing. Also re-execute the install & insert scripts. 
+If any errors occur during the re-indexing. Also re-execute the install & insert scripts.
 
 ---
 
